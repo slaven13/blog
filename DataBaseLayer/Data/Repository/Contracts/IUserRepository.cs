@@ -1,0 +1,13 @@
+﻿using DataBaseAccessLayer.Data.Repository.GenericRepository;
+using DataBaseAccessLayer.Data.Entities;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace DataBaseAccessLayer.Data.Repository.Contracts
+{
+    public interface IUserRepository : IRepository<User>
+    {
+        string GetUsername(long userId);
+    }
+}

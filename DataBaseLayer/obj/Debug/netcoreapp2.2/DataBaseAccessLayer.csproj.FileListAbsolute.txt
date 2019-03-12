@@ -1,0 +1,9 @@
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\bin\Debug\netcoreapp2.2\DataBaseAccessLayer.deps.json
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\bin\Debug\netcoreapp2.2\DataBaseAccessLayer.dll
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\bin\Debug\netcoreapp2.2\DataBaseAccessLayer.pdb
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.csproj.CoreCompileInputs.cache
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.AssemblyInfoInputs.cache
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.AssemblyInfo.cs
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.dll
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.pdb
+C:\Users\Slaven\source\repos\Blog\DataBaseLayer\obj\Debug\netcoreapp2.2\DataBaseAccessLayer.csprojAssemblyReference.cache
