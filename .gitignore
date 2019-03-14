@@ -1,2 +1,3 @@
 .vs/
-.Blog/build/
+Blog/build/*
+Blog/obj/*
