@@ -18,7 +18,7 @@ using BusinessLogic.Services;
 using DataBaseAccessLayer.Data.Repository.Contracts;
 using DataBaseAccessLayer.Data.Repository;
 using AutoMapper;
-
+using BusinessLogic.Models.Mappers;
 
 namespace Blog
 {
@@ -55,6 +55,9 @@ namespace Blog
             services.AddScoped(typeof(ICommentsService), typeof(CommentsService));
 
             services.AddAutoMapper();
+            //services.AddScoped(typeof(Profile), typeof(UserProfile));
+            //services.AddScoped(typeof(Profile), typeof(PostProfile));
+            //services.AddScoped(typeof(Profile), typeof(CommentProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

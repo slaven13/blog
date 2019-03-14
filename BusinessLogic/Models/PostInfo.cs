@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataBaseAccessLayer.Models
+namespace BusinessLogic.Models
 {
-    public class Post
+    public class PostInfo
     {
         public long Id { get; set; }
-        public string Username { get; set; }
+        public UserInfo UserInfo { get; set; }
         public string Title { get; set; }
-        public string Content { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

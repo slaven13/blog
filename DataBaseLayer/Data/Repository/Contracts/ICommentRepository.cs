@@ -10,5 +10,6 @@ namespace DataBaseAccessLayer.Data.Repository.Contracts
     {
         IList<Comment> GetCommentsByUser(long userId);
         IList<Comment> GetCommentsByPost(long postId);
+        IList<Comment> GetCommentsWithUser();
     }
 }

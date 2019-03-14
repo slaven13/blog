@@ -8,6 +8,7 @@ using System.Linq;
 using BusinessLogic.Models;
 using System.Text.RegularExpressions;
 using System.Linq.Dynamic;
+using AutoMapper;
 
 namespace BusinessLogic.Services
 {
@@ -16,70 +17,38 @@ namespace BusinessLogic.Services
         private readonly IRepository<DataBaseAccessLayer.Data.Entities.Comment> _repository;
         private readonly ICommentRepository _commentRepository;
         private readonly IPostRepository _postRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         public CommentsService(IRepository<DataBaseAccessLayer.Data.Entities.Comment> repository,
                             ICommentRepository commentRepository,
-                            IPostRepository postRepository)
+                            IPostRepository postRepository,
+                            IUserRepository userRepository,
+                            IMapper mapper)
         {
             _repository = repository;
             _commentRepository = commentRepository;
             _postRepository = postRepository;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public List<BusinessLogic.Models.Comment> GetPostComments(long postId)
         {
-            return _commentRepository.GetCommentsByPost(postId)
-                                     .Select(c => new BusinessLogic.Models.Comment
-                                                  {
-                                                      Id = c.Id,
-                                                      Content = c.Content,
-                                                      CreationDate = c.CreationDate,
-                                                      User = new BusinessLogic.Models.User
-                                                      {
-                                                          Id = c.UserId,
-                                                          Username = c.User.Username
-                                                      }
-                                                  }            
-                                     ).ToList();
+            return _mapper.Map<List<BusinessLogic.Models.Comment>>(_commentRepository.GetCommentsByPost(postId));
         }
 
         public BusinessLogic.Models.Comment GetComment(long commentId)
         {
-            var comment = _commentRepository.Get(commentId);
-            var post = _postRepository.Get(comment.PostId);
+            var comment = _commentRepository.GetCommentsWithUser().Where(c => c.Id == commentId).FirstOrDefault();            
+            comment.Post = _postRepository.Get(comment.PostId);
 
-            return new BusinessLogic.Models.Comment
-            {
-                Id = comment.Id,
-                Content = comment.Content,
-                CreationDate = comment.CreationDate,
-                User = new BusinessLogic.Models.User
-                       {
-                            Id = comment.UserId,
-                            Username = comment.User.Username
-                       },
-                Post = new BusinessLogic.Models.Post
-                {
-                    Id = comment.PostId,
-                    Title = comment.Post.Title,
-                    Content = comment.Post.Content.Length > Constants.PostPreviewMaxChars ?
-                                                            ContentOperations.RemoveHtmlTags(comment.Post.Content).Substring(0, Constants.PostPreviewMaxChars) + Constants.ContentPreviewAppendix
-                                                            : comment.Post.Content,
-                }
-            };         
+            return _mapper.Map<BusinessLogic.Models.Comment>(comment);
         }
 
         public void AddComment(BusinessLogic.Models.Comment comment)
         {
-            _commentRepository.Add(new DataBaseAccessLayer.Data.Entities.Comment
-                                  {
-                                        Content = comment.Content,
-                                        CreationDate = DateTime.UtcNow,
-                                        UserId = comment.UserId,
-                                        PostId = comment.PostId,
-                                        ParentCommentId = comment.ParentCommentId
-                                  }
-            );
+            _commentRepository.Add(_mapper.Map<DataBaseAccessLayer.Data.Entities.Comment>(comment));
         }
 
         public void DeleteComment(long commentId)
@@ -115,12 +84,7 @@ namespace BusinessLogic.Services
             {
                 try
                 {
-                    _repository.Update(new DataBaseAccessLayer.Data.Entities.Comment
-                                       {
-                                           Id = comment.Id,
-                                           Content = comment.Content
-                                       }
-                    );
+                    _repository.Update(_mapper.Map<DataBaseAccessLayer.Data.Entities.Comment>(comment));
                 }
                 catch (Exception ex)
                 {

@@ -39,11 +39,7 @@ namespace BusinessLogic.Services
             var mostRecentPosts = getMostRecentPosts(Constants.TopNMostRecentPosts);
 
             var mostCommentedPosts = getMostCommentedPosts(Constants.TopNMostCommentedPosts);
-            foreach(var post in mostCommentedPosts)
-            {
-                post.Comments = getPostMostRecentComments(post.Id, Constants.TopNMostRecentCommentsByPost);
-            }
-
+            
             var mostRecentComments = getPostMostRecentComments(Constants.AllPosts, Constants.TopNMostRecentComments);            
 
             var mostActiveUsers = getTopNActiveUsers(Constants.TopNMostActiveUsers);
@@ -59,28 +55,18 @@ namespace BusinessLogic.Services
 
         public BusinessLogic.Models.Post GetPost(long postId)
         {
-            var post = _postRepository.Get(postId);
-            var commentsByPost = _commentRepository.GetCommentsByPost(postId);
+            return _mapper.Map<BusinessLogic.Models.Post>(_postRepository.GetPostFull(postId));
+            //var commentsByPost = _commentRepository.GetCommentsByPost(postId);
 
-            return new BusinessLogic.Models.Post
-            {
-                Id = post.Id,
-                Title = post.Title,
-                Content = post.Title,
-                User = new BusinessLogic.Models.User
-                {
-                    Id = post.User.Id,
-                    Username = post.User.Username
-                },
-                CreationDate = post.CreationDate,
-                Comments = commentsByPost.Select(c => new BusinessLogic.Models.Comment
-                                                      {
-                                                          Id = c.Id,
-                                                          Content = c.Content
-                                                      }
-                                          )
-                                         .ToList()
-            };
+            //return new BusinessLogic.Models.Post
+            //{
+            //    Id = post.Id,
+            //    Title = post.Title,
+            //    Content = post.Title,
+            //    UserInfo = _mapper.Map<BusinessLogic.Models.UserInfo>(post.User),
+            //    CreationDate = post.CreationDate,
+            //    Comments = _mapper.Map<List<BusinessLogic.Models.Comment>>(post.Comments)
+            //};
         }
 
         public void AddPost(BusinessLogic.Models.Post post)
@@ -91,7 +77,7 @@ namespace BusinessLogic.Services
                                 {
                                     Title = post.Title,
                                     Content = post.Content,
-                                    UserId = post.User.Id,                                    
+                                    UserId = post.UserInfo.Id,                                    
                                     CreationDate = DateTime.UtcNow
                                 }
                 );
@@ -155,130 +141,43 @@ namespace BusinessLogic.Services
             return _repository.Get().Any(p => p.Id == postId);
         }
 
-        private List<BusinessLogic.Models.Post> getMostCommentedPosts(int n)
+        private List<PostPreview> getMostCommentedPosts(int n)
         {
-            var postsWithComments = _postRepository.GetPostsWithComments();
+            var postsWithComments = _mapper.Map<List<PostPreview>>(_postRepository.GetPostsWithComments());
 
-            return postsWithComments
-                              .OrderByDescending(p => p.Comments.Count())
-                              .Take(n)
-                              .Select(p => new BusinessLogic.Models.Post
-                                           {
-                                               Id = p.Id,
-                                               Title = p.Title,                                               
-                                               CreationDate = p.CreationDate,
-                                               User = new BusinessLogic.Models.User
-                                               {
-                                                   Id = p.UserId,
-                                                   Username = _userRepository.Get(p.UserId).Username
-                                               },
-                                               Comments = p.Comments
-                                                           .OrderByDescending(c => c.CreationDate)
+            foreach (var post in postsWithComments)
+            {
+                post.CommentsPreview = post.CommentsPreview.OrderByDescending(c => c.CreationDate)
                                                            .Take(Constants.TopNMostRecentComments)
-                                                           .Select(c => new BusinessLogic.Models.Comment
-                                                                        {
-                                                                            Id = c.Id,
-                                                                            User = new BusinessLogic.Models.User
-                                                                            {
-                                                                                Id = c.User.Id,
-                                                                                Username = c.User.Username
-                                                                            },                                                               
-                                                                            UserId = c.UserId,
-                                                                            PostId = c.PostId,
-                                                                            Content = c.Content,
-                                                                            CreationDate = c.CreationDate
-                                                                        }                                                           
-                                                           ).ToList()
-                                           }                       
-                              )    
-                              .ToList();
-        }
-
-        private List<BusinessLogic.Models.Comment> getPostMostRecentComments(long postId, int n)
-        {
-            List<DataBaseAccessLayer.Data.Entities.Comment> comments = null;
-            
-            if (postId <= 0)
-            {
-                 comments = _commentRepository.Get()
-                                              .OrderByDescending(c => c.CreationDate)
-                                              .Take(n)
-                                              .ToList();
-            }
-            else
-            {
-                comments = _commentRepository.GetCommentsByPost(postId)
-                                             .OrderByDescending(c => c.CreationDate)
-                                             .Take(n)
-                                             .ToList();
+                                                           .ToList();
             }
 
-            return comments.Select(c => new BusinessLogic.Models.Comment
-                                        {
-                                             Content = c.Content.Length > Constants.CommentPreviewMaxChars ? 
-                                                       ContentOperations.RemoveHtmlTags(c.Content).Substring(0, Constants.CommentPreviewMaxChars) + Constants.ContentPreviewAppendix
-                                                       : c.Content,
-                                             User = new BusinessLogic.Models.User
-                                             {
-                                                 Id = c.UserId,
-                                                 Username = _userRepository.Get(c.UserId).Username
-                                             }
-                                        }
-                            )
-                            .ToList();
+            return _mapper.Map<List<PostPreview>>(postsWithComments.OrderByDescending(p => p.CommentsPreview.Count()).Take(n));
         }
 
-        private List<BusinessLogic.Models.Post> getMostRecentPosts(int n)
+        private List<CommentPreview> getPostMostRecentComments(long postId, int n)
         {
-            var mostRecentPosts = _mapper.Map<List<BusinessLogic.Models.Post>>(_postRepository.GetPostsWithComments()
-                                                                                              .OrderByDescending(p => p.CreationDate)
-                                                                                              .Take(n));
+            var comments = postId <= 0 ? _commentRepository.Get().ToList() : _commentRepository.GetCommentsByPost(postId).ToList();
+
+            return _mapper.Map<List<CommentPreview>>(comments.OrderByDescending(c => c.CreationDate).Take(n));
+        }
+
+        private List<PostPreview> getMostRecentPosts(int n)
+        {
+            var mostRecentPosts = _mapper.Map<IEnumerable<PostPreview>>(_postRepository.GetPostsWithComments()
+                                                                                .OrderByDescending(p => p.CreationDate)
+                                                                                .Take(n).ToList());
             foreach(var post in mostRecentPosts)
             {
-                post.Comments = post.Comments.OrderByDescending(c => c.CreationDate)
-                                             .Take(Constants.TopNMostRecentComments)
-                                             .ToList();
+                post.CommentsPreview = post.CommentsPreview.OrderByDescending(c => c.CreationDate)
+                                                           .Take(Constants.TopNMostRecentComments)
+                                                           .ToList();
             }
 
-            return mostRecentPosts;
-
-            //return _repository.Get()
-            //                  .OrderByDescending(p => p.CreationDate)
-            //                  .Take(n)
-            //                  .Select(p => new BusinessLogic.Models.Post
-            //                               {
-            //                                   Id = p.Id,
-            //                                   Title = p.Title,
-            //                                   Content = p.Content.Length > Constants.PostPreviewMaxChars ?                                                
-            //                                                                ContentOperations.RemoveHtmlTags(p.Content)
-            //                                                                    .Substring(0, Constants.PostPreviewMaxChars)
-            //                                                                    + Constants.ContentPreviewAppendix
-            //                                                                : p.Content,
-            //                                   Comments = _commentRepository.GetCommentsByPost(p.Id)
-            //                                                                .Select(c => new BusinessLogic.Models.Comment
-            //                                                                             {
-            //                                                                                 Id = c.Id,
-            //                                                                                 Content = c.Content.Length > Constants.CommentPreviewMaxChars ?
-            //                                                                                                              ContentOperations.RemoveHtmlTags(c.Content)
-            //                                                                                                                .Substring(0, Constants.CommentPreviewMaxChars)
-            //                                                                                                                + Constants.ContentPreviewAppendix
-            //                                                                                                              : c.Content
-
-            //                                                                             }
-            //                                                                )
-            //                                                                .ToList(),
-            //                                   User = new BusinessLogic.Models.User
-            //                                   {
-            //                                       Id = p.UserId,
-            //                                       Username = _userRepository.Get(p.UserId).Username
-            //                                   },
-            //                                   CreationDate = p.CreationDate
-            //                               }                                    
-            //                  )
-            //                  .ToList();
+            return mostRecentPosts.ToList();
         }
 
-        private List<BusinessLogic.Models.User> getTopNActiveUsers(int n)
+        private List<UserInfo> getTopNActiveUsers(int n)
         {
             var usersWithMostComments = _commentRepository.Get()
                                                           .GroupBy(c => c.User)
@@ -346,12 +245,7 @@ namespace BusinessLogic.Services
 
             return usersCounts.OrderByDescending(u => u.Count)
                               .Take(n)
-                              .Select(u => new BusinessLogic.Models.User
-                                           {
-                                               Id = u.Id,
-                                               Username = u.Username
-                                           }
-                              )
+                              .Select(u => _mapper.Map<BusinessLogic.Models.UserInfo>(u))
                               .ToList();
         }
 

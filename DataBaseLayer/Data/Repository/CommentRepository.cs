@@ -2,9 +2,9 @@
 using DataBaseAccessLayer.Data.Repository.GenericRepository;
 using DataBaseAccessLayer.Data.DatabaseContext;
 using DataBaseAccessLayer.Data.Entities;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace DataBaseAccessLayer.Data.Repository
 {
@@ -26,6 +26,11 @@ namespace DataBaseAccessLayer.Data.Repository
         public IList<Comment> GetCommentsByPost(long postId)
         {
             return commentRepository.FilterBy(c => c.PostId == postId);
-        }        
+        }
+
+        public IList<Comment> GetCommentsWithUser()
+        {
+            return commentRepository.Get().Include(c => c.User).ToList();
+        }
     }
 }

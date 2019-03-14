@@ -11,5 +11,6 @@ namespace DataBaseAccessLayer.Data.Repository.Contracts
         IList<Post> GetPostsByUser(long userId);
         IList<Post> GetPostsWithComments();
         Post GetPostWithComments(long postId);
+        Post GetPostFull(long postId);
     }
 }

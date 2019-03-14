@@ -8,12 +8,9 @@ namespace BusinessLogic.Models
     {
         public long Id { get; set; }
         public string Content { get; set; }
-        public User User { get; set; }
-        public Post Post { get; set; }
-        public Comment ParentComment { get; set; }
+        public UserInfo UserInfo { get; set; }
+        public PostInfo PostInfo { get; set; }
+        public CommentInfo ParentCommentInfo { get; set; }
         public DateTime CreationDate { get; set; }
-        public long UserId { get; set; }
-        public long PostId { get; set; }
-        public long? ParentCommentId { get; set; }
     }
 }

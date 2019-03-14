@@ -18,6 +18,15 @@ namespace DataBaseAccessLayer.Data.Repository
             this.postRepository = postRepository;
         }
 
+        public Post GetPostFull(long postId)
+        {
+            return postRepository.Get()
+                                 .Where(p => p.Id == postId)
+                                 .Include(p => p.Comments)
+                                 .Include(p => p.User)
+                                 .FirstOrDefault();
+        }
+
         public IList<Post> GetPostsByUser(long userId)
         {            
             return postRepository.FilterBy(p => p.UserId == userId);
