@@ -21,10 +21,9 @@ namespace DataBaseAccessLayer.Data.Repository
         public Post GetPostFull(long postId)
         {
             return postRepository.Get()
-                                 .Where(p => p.Id == postId)
                                  .Include(p => p.Comments)
                                  .Include(p => p.User)
-                                 .FirstOrDefault();
+                                 .FirstOrDefault(p => p.Id == postId);
         }
 
         public IList<Post> GetPostsByUser(long userId)
@@ -41,8 +40,7 @@ namespace DataBaseAccessLayer.Data.Repository
         {
             return postRepository.Get()
                                  .Include(p => p.Comments)
-                                 .Where(p => p.Id == postId)
-                                 .FirstOrDefault();
+                                 .FirstOrDefault(p => p.Id == postId);
         }
     }
 }

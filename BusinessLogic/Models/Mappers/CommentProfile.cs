@@ -9,22 +9,29 @@ namespace BusinessLogic.Models.Mappers
     {
         public CommentProfile()
         {
-            CreateMap<DataBaseAccessLayer.Data.Entities.Comment, Comment>()
-                .BeforeMap((x, s) => s.CreationDate = DateTime.UtcNow)
-                .ForMember(x => x.PostInfo, dst => dst.MapFrom(src => src.Post))
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
-                .ForMember(x => x.ParentCommentInfo, dst => dst.MapFrom(src => src.ParentComment))
-                .ReverseMap();
+            CreateMap<DataBaseAccessLayer.Data.Entities.Comment, Comment>()                
+                .ForMember(d => d.PostInfo, s => s.MapFrom(src => src.Post))
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
+                .ForMember(d => d.ParentCommentInfo, s => s.MapFrom(src => src.ParentComment))
+                .AfterMap((s, d) => d.PostInfo.Id = s.PostId)
+                .AfterMap((s, d) => d.UserInfo.Id = s.UserId)
+                .ReverseMap()
+                .AfterMap((s, d) => d.CreationDate = DateTime.UtcNow)
+                .AfterMap((s, d) => d.User = null)
+                .AfterMap((s, d) => d.UserId = s.UserInfo.Id)
+                .AfterMap((s, d) => d.Post = null)
+                .AfterMap((s, d) => d.PostId = s.PostInfo.Id)
+                .AfterMap((s, d) => d.Id = 0);
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Comment, CommentPreview>()
-                .ForMember(x => x.ContentPreview, dst => dst.MapFrom(src => src.Content))
-                .ForMember(x => x.PostInfo, dst => dst.MapFrom(src => src.Post))
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
+                .ForMember(d => d.ContentPreview, s => s.MapFrom(src => src.Content))
+                .ForMember(d => d.PostInfo, s => s.MapFrom(src => src.Post))
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
                 .ReverseMap();
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Comment, CommentInfo>()
-                .ForMember(x => x.ContentPreview, dst => dst.MapFrom(src => src.Content))
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
+                .ForMember(d => d.ContentPreview, s => s.MapFrom(src => src.Content))
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
                 .ReverseMap();
         }
     }

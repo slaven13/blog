@@ -50,7 +50,7 @@ namespace DataBaseAccessLayer.Data.Repository.GenericRepository
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }            
         }
 
@@ -63,7 +63,7 @@ namespace DataBaseAccessLayer.Data.Repository.GenericRepository
             }
             catch(Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -78,7 +78,7 @@ namespace DataBaseAccessLayer.Data.Repository.GenericRepository
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
             else throw new Exception("No item found");

@@ -10,6 +10,7 @@ namespace BusinessLogic.Models.Mappers
         public UserProfile()
         {
             CreateMap<DataBaseAccessLayer.Data.Entities.User, UserInfo>().ReverseMap();
+                
         }
     }
 }

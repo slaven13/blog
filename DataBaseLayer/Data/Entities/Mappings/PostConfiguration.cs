@@ -13,7 +13,8 @@ namespace DataBaseAccessLayer.Data.Entities.Mappings
         {
             builder.ToTable("Posts", "dbo");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Property(x => x.Id)
+                   .ValueGeneratedOnAdd();
 
             builder.HasOne(p => p.User)
                    .WithMany(u => u.Posts)

@@ -7,7 +7,7 @@ using BusinessLogic.Services;
 
 namespace Blog.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/blog")]
     [ApiController]
     public class BlogController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace Blog.Controllers
 
         // PUT api/values/5
         [HttpPut("posts/{postId}")]
-        public void Put([FromBody] BusinessLogic.Models.Post post)
+        public void Put(long postId, [FromBody] BusinessLogic.Models.Post post)
         {
             _postService.EditPost(post);
         }

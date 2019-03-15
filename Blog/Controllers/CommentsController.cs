@@ -34,7 +34,7 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("comments")]
-        public void Post([FromBody] BusinessLogic.Models.Comment comment)
+        public void Post(long postId, [FromBody] BusinessLogic.Models.Comment comment)
         {
             _commentsService.AddComment(comment);
         }
@@ -42,7 +42,7 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("comments/{commentId}")]
-        public void Post([FromBody] BusinessLogic.Models.Comment comment, long commentId)
+        public void Post(long postId, [FromBody] BusinessLogic.Models.Comment comment, long commentId)
         {
             comment.ParentCommentInfo.Id = commentId;
             _commentsService.AddComment(comment);
@@ -50,14 +50,14 @@ namespace Blog.Controllers
 
         // PUT api/values/5
         [HttpPut("comments/{commentId}")]
-        public void Put([FromBody] BusinessLogic.Models.Comment comment)
+        public void Put(long postId, [FromBody] BusinessLogic.Models.Comment comment)
         {
             _commentsService.EditComment(comment);
         }
 
         // DELETE api/values/5
         [HttpDelete("comments/{commentId}")]
-        public void Delete(long commentId)
+        public void Delete(long postId, long commentId)
         {
             _commentsService.DeleteComment(commentId);
         }

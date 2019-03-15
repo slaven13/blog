@@ -73,18 +73,11 @@ namespace BusinessLogic.Services
         {
             try
             {
-                _repository.Add(new DataBaseAccessLayer.Data.Entities.Post
-                                {
-                                    Title = post.Title,
-                                    Content = post.Content,
-                                    UserId = post.UserInfo.Id,                                    
-                                    CreationDate = DateTime.UtcNow
-                                }
-                );
+                _repository.Add(_mapper.Map<DataBaseAccessLayer.Data.Entities.Post>(post));
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
@@ -113,7 +106,7 @@ namespace BusinessLogic.Services
 
         public void EditPost(BusinessLogic.Models.Post post)
         {
-            if (!postExists(post.Id))
+            if (!postExists((long)post.Id))
             {
                 throw new Exception("There is no post with Id = ${post.Id}");
             }
@@ -121,17 +114,11 @@ namespace BusinessLogic.Services
             {
                 try
                 {
-                    _repository.Update(new DataBaseAccessLayer.Data.Entities.Post
-                                       {
-                                            Id = post.Id,
-                                            Title = post.Title,
-                                            Content = post.Content
-                                       }
-                    );
+                    _repository.Update(_mapper.Map<DataBaseAccessLayer.Data.Entities.Post>(post));
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw;
                 }
             }
         }

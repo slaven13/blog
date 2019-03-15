@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BusinessLogic.Models.Mappers
 {
@@ -9,20 +7,23 @@ namespace BusinessLogic.Models.Mappers
     {
         public PostProfile()
         {
-            CreateMap<DataBaseAccessLayer.Data.Entities.Post, Post>()
-                .BeforeMap((x, s) => s.CreationDate = DateTime.UtcNow)
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
-                .ReverseMap();
-
+            CreateMap<DataBaseAccessLayer.Data.Entities.Post, Post>()                
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
+                .AfterMap((s, d) => d.UserInfo.Id = s.UserId)
+                .ReverseMap()
+                .AfterMap((s, d) => d.CreationDate = DateTime.UtcNow)
+                .AfterMap((s, d) => d.User = null)
+                .AfterMap((s, d) => d.UserId = s.UserInfo.Id)
+                .AfterMap((s, d) => d.Id = 0);
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Post, PostPreview>()
-                .ForMember(x => x.CommentsPreview, dst => dst.MapFrom(src => src.Comments))
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
-                .ForMember(x => x.ContentPreview, dst => dst.MapFrom(src => src.Content))
+                .ForMember(d => d.CommentsPreview, s => s.MapFrom(src => src.Comments))
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
+                .ForMember(d => d.ContentPreview, s => s.MapFrom(src => src.Content))
                 .ReverseMap();
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Post, PostInfo>()
-                .ForMember(x => x.UserInfo, dst => dst.MapFrom(src => src.User))
+                .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))                
                 .ReverseMap();
         }
     }

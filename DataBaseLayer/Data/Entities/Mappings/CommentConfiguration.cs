@@ -13,7 +13,8 @@ namespace DataBaseAccessLayer.Data.Entities.Mappings
         {            
             builder.ToTable("Comments", "dbo");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            builder.Property(x => x.Id)
+                   .ValueGeneratedOnAdd();
 
             builder.HasOne(c => c.User)
                    .WithMany(u => u.Comments)
