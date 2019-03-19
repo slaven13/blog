@@ -42,16 +42,17 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("comments/{commentId}")]
-        public void Post(long postId, [FromBody] BusinessLogic.Models.Comment comment, long commentId)
+        public void Post(long postId, long commentId, [FromBody] BusinessLogic.Models.Comment comment)
         {
-            comment.ParentCommentInfo.Id = commentId;
+            comment.ParentCommentId = commentId;
             _commentsService.AddComment(comment);
         }
 
         // PUT api/values/5
         [HttpPut("comments/{commentId}")]
-        public void Put(long postId, [FromBody] BusinessLogic.Models.Comment comment)
+        public void Put(long postId, long commentId, [FromBody] BusinessLogic.Models.Comment comment)
         {
+            comment.Id = commentId;
             _commentsService.EditComment(comment);
         }
 

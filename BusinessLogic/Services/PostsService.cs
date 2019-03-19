@@ -130,7 +130,7 @@ namespace BusinessLogic.Services
 
         private List<PostPreview> getMostCommentedPosts(int n)
         {
-            var postsWithComments = _mapper.Map<List<PostPreview>>(_postRepository.GetPostsWithComments());
+            var postsWithComments = _mapper.Map<List<PostPreview>>(_postRepository.GetPosts());
 
             foreach (var post in postsWithComments)
             {
@@ -144,16 +144,20 @@ namespace BusinessLogic.Services
 
         private List<CommentPreview> getPostMostRecentComments(long postId, int n)
         {
-            var comments = postId <= 0 ? _commentRepository.Get().ToList() : _commentRepository.GetCommentsByPost(postId).ToList();
+            var comments = postId <= 0 ? 
+                           _commentRepository.GetComments().ToList()
+                           : _commentRepository.GetComments()
+                                               .Where(c => c.PostId == postId)
+                                               .ToList();
 
             return _mapper.Map<List<CommentPreview>>(comments.OrderByDescending(c => c.CreationDate).Take(n));
         }
 
         private List<PostPreview> getMostRecentPosts(int n)
         {
-            var mostRecentPosts = _mapper.Map<IEnumerable<PostPreview>>(_postRepository.GetPostsWithComments()
-                                                                                .OrderByDescending(p => p.CreationDate)
-                                                                                .Take(n).ToList());
+            var mostRecentPosts = _mapper.Map<IEnumerable<PostPreview>>(_postRepository.GetPosts()
+                                                                                       .OrderByDescending(p => p.CreationDate)
+                                                                                       .Take(n).ToList());
             foreach(var post in mostRecentPosts)
             {
                 post.CommentsPreview = post.CommentsPreview.OrderByDescending(c => c.CreationDate)

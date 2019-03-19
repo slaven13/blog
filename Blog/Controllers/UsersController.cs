@@ -43,11 +43,12 @@ namespace Blog.Controllers
         [HttpPut("{userId}")]
         public void Put(long userId, [FromBody] BusinessLogic.Models.User user)
         {
+            user.Id = userId;
             _usersService.EditUser(user);
         }
 
         // DELETE api/values/5
-        [HttpDelete("{userId")]
+        [HttpDelete("{userId}")]
         public void Delete(long userId)
         {
             _usersService.DeleteUser(userId);

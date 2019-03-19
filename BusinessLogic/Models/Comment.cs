@@ -10,7 +10,7 @@ namespace BusinessLogic.Models
         public string Content { get; set; }
         public UserInfo UserInfo { get; set; }
         public PostInfo PostInfo { get; set; }
-        public CommentInfo ParentCommentInfo { get; set; }
+        public long? ParentCommentId { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

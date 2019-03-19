@@ -12,7 +12,7 @@ namespace DataBaseAccessLayer.Data.Repository
     {
         private readonly IRepository<Post> postRepository;
 
-        public PostRepository(BlogContext context,IRepository<Post> postRepository)
+        public PostRepository(BlogContext context, IRepository<Post> postRepository)
             : base(context)
         {
             this.postRepository = postRepository;
@@ -24,23 +24,14 @@ namespace DataBaseAccessLayer.Data.Repository
                                  .Include(p => p.Comments)
                                  .Include(p => p.User)
                                  .FirstOrDefault(p => p.Id == postId);
-        }
+        }          
 
-        public IList<Post> GetPostsByUser(long userId)
-        {            
-            return postRepository.FilterBy(p => p.UserId == userId);
-        }        
-
-        public IList<Post> GetPostsWithComments()
-        {
-            return postRepository.Get().Include(p => p.Comments).ToList();
-        }
-
-        public Post GetPostWithComments(long postId)
+        public IList<Post> GetPosts()
         {
             return postRepository.Get()
                                  .Include(p => p.Comments)
-                                 .FirstOrDefault(p => p.Id == postId);
-        }
+                                 .Include(p => p.User)
+                                 .ToList();
+        }        
     }
 }

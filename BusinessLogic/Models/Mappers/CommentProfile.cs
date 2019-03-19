@@ -12,16 +12,18 @@ namespace BusinessLogic.Models.Mappers
             CreateMap<DataBaseAccessLayer.Data.Entities.Comment, Comment>()                
                 .ForMember(d => d.PostInfo, s => s.MapFrom(src => src.Post))
                 .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
-                .ForMember(d => d.ParentCommentInfo, s => s.MapFrom(src => src.ParentComment))
+                .ForMember(d => d.ParentCommentId, s => s.MapFrom(src => src.ParentComment.Id))
                 .AfterMap((s, d) => d.PostInfo.Id = s.PostId)
                 .AfterMap((s, d) => d.UserInfo.Id = s.UserId)
-                .ReverseMap()
+                .ReverseMap()                
                 .AfterMap((s, d) => d.CreationDate = DateTime.UtcNow)
                 .AfterMap((s, d) => d.User = null)
-                .AfterMap((s, d) => d.UserId = s.UserInfo.Id)
                 .AfterMap((s, d) => d.Post = null)
-                .AfterMap((s, d) => d.PostId = s.PostInfo.Id)
-                .AfterMap((s, d) => d.Id = 0);
+                .AfterMap((s, d) => d.Replies = null)
+                .AfterMap((s, d) => d.ParentComment = null)
+                .AfterMap((s, d) => d.UserId = s.UserInfo.Id)
+                .AfterMap((s, d) => d.PostId = s.PostInfo.Id)                
+                .AfterMap((s, d) => d.ParentCommentId = s.ParentCommentId != null ? s.ParentCommentId : (long?)null);
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Comment, CommentPreview>()
                 .ForMember(d => d.ContentPreview, s => s.MapFrom(src => src.Content))

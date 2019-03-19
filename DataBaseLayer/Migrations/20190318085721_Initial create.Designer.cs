@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBaseAccessLayer.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20190314093139_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190318085721_Initial create")]
+    partial class Initialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,9 +39,7 @@ namespace DataBaseAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentCommentId")
-                        .IsUnique()
-                        .HasFilter("[ParentCommentId] IS NOT NULL");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PostId");
 
@@ -93,9 +91,8 @@ namespace DataBaseAccessLayer.Migrations
             modelBuilder.Entity("DataBaseAccessLayer.Data.Entities.Comment", b =>
                 {
                     b.HasOne("DataBaseAccessLayer.Data.Entities.Comment", "ParentComment")
-                        .WithOne()
-                        .HasForeignKey("DataBaseAccessLayer.Data.Entities.Comment", "ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("DataBaseAccessLayer.Data.Entities.Post", "Post")
                         .WithMany("Comments")

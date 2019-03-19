@@ -8,9 +8,7 @@ namespace DataBaseAccessLayer.Data.Repository.Contracts
 {
     public interface IPostRepository : IRepository<Post>
     {
-        IList<Post> GetPostsByUser(long userId);
-        IList<Post> GetPostsWithComments();
-        Post GetPostWithComments(long postId);
+        IList<Post> GetPosts();
         Post GetPostFull(long postId);
     }
 }

@@ -35,7 +35,7 @@ namespace BusinessLogic.Services
 
         public List<BusinessLogic.Models.User> GetUsers()
         {
-            return _mapper.Map<List<BusinessLogic.Models.User>>(_userRepository.Get());
+            return _mapper.Map<List<BusinessLogic.Models.User>>(_userRepository.GetUsersWithPostsAndComments());
         }
 
         public BusinessLogic.Models.User GetUserFull(long userId)

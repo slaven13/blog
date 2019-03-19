@@ -37,9 +37,7 @@ namespace DataBaseAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentCommentId")
-                        .IsUnique()
-                        .HasFilter("[ParentCommentId] IS NOT NULL");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("PostId");
 
@@ -91,9 +89,8 @@ namespace DataBaseAccessLayer.Migrations
             modelBuilder.Entity("DataBaseAccessLayer.Data.Entities.Comment", b =>
                 {
                     b.HasOne("DataBaseAccessLayer.Data.Entities.Comment", "ParentComment")
-                        .WithOne()
-                        .HasForeignKey("DataBaseAccessLayer.Data.Entities.Comment", "ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("DataBaseAccessLayer.Data.Entities.Post", "Post")
                         .WithMany("Comments")

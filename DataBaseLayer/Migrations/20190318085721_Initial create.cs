@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataBaseAccessLayer.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initialcreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,10 +60,10 @@ namespace DataBaseAccessLayer.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
+                    ParentCommentId = table.Column<long>(nullable: true),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<long>(nullable: false),
-                    PostId = table.Column<long>(nullable: false),
-                    ParentCommentId = table.Column<long>(nullable: true)
+                    PostId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,9 +95,7 @@ namespace DataBaseAccessLayer.Migrations
                 name: "IX_Comments_ParentCommentId",
                 schema: "dbo",
                 table: "Comments",
-                column: "ParentCommentId",
-                unique: true,
-                filter: "[ParentCommentId] IS NOT NULL");
+                column: "ParentCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_PostId",

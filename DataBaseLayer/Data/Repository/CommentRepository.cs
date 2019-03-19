@@ -12,25 +12,28 @@ namespace DataBaseAccessLayer.Data.Repository
     {
         private readonly IRepository<Comment> commentRepository;
 
-        public CommentRepository(BlogContext context,IRepository<Comment> commentRepository)
+        public CommentRepository(BlogContext context, IRepository<Comment> commentRepository)
             : base(context)
         {
             this.commentRepository = commentRepository;
         }
 
-        public IList<Comment> GetCommentsByUser(long userId)
+        public IList<Comment> GetComments()
         {
-            return commentRepository.FilterBy(c => c.UserId == userId);
+            return commentRepository.Get()
+                                    .Include(c => c.User)
+                                    .Include(c => c.Post)
+                                    .Include(c => c.Replies)
+                                    .ToList();
         }
 
-        public IList<Comment> GetCommentsByPost(long postId)
+        public Comment GetFullComment(long commentId)
         {
-            return commentRepository.FilterBy(c => c.PostId == postId);
-        }
-
-        public IList<Comment> GetCommentsWithUser()
-        {
-            return commentRepository.Get().Include(c => c.User).ToList();
+            return commentRepository.Get()
+                                    .Include(c => c.User)
+                                    .Include(c => c.Post)
+                                    .Include(c => c.Replies)
+                                    .FirstOrDefault(c => c.Id == commentId);
         }
     }
 }

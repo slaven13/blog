@@ -19,6 +19,6 @@ namespace BusinessLogic.Models
                                            : content;
             }
         }
-        public UserInfo UserInfo { get; set; }
+        public UserInfo UserInfo { get; set; }        
     }
 }

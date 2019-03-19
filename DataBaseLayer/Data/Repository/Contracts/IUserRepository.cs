@@ -9,5 +9,6 @@ namespace DataBaseAccessLayer.Data.Repository.Contracts
     public interface IUserRepository : IRepository<User>
     {
         string GetUsername(long userId);
+        IList<User> GetUsersWithPostsAndComments();
     }
 }

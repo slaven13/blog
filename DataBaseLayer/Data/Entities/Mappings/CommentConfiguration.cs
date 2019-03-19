@@ -27,9 +27,8 @@ namespace DataBaseAccessLayer.Data.Entities.Mappings
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(c => c.ParentComment)
-                   .WithOne()
-                   .HasForeignKey("Comment", "ParentCommentId")
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .WithMany(c => c.Replies)
+                   .HasForeignKey(c => c.ParentCommentId);                   
         }
     }
 }

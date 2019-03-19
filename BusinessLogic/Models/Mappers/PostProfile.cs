@@ -7,14 +7,13 @@ namespace BusinessLogic.Models.Mappers
     {
         public PostProfile()
         {
-            CreateMap<DataBaseAccessLayer.Data.Entities.Post, Post>()                
+            CreateMap<DataBaseAccessLayer.Data.Entities.Post, Post>()
                 .ForMember(d => d.UserInfo, s => s.MapFrom(src => src.User))
                 .AfterMap((s, d) => d.UserInfo.Id = s.UserId)
                 .ReverseMap()
                 .AfterMap((s, d) => d.CreationDate = DateTime.UtcNow)
                 .AfterMap((s, d) => d.User = null)
-                .AfterMap((s, d) => d.UserId = s.UserInfo.Id)
-                .AfterMap((s, d) => d.Id = 0);
+                .AfterMap((s, d) => d.UserId = s.UserInfo.Id);
 
             CreateMap<DataBaseAccessLayer.Data.Entities.Post, PostPreview>()
                 .ForMember(d => d.CommentsPreview, s => s.MapFrom(src => src.Comments))

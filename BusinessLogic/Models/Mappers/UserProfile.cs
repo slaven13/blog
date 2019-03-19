@@ -9,8 +9,13 @@ namespace BusinessLogic.Models.Mappers
     {
         public UserProfile()
         {
-            CreateMap<DataBaseAccessLayer.Data.Entities.User, UserInfo>().ReverseMap();
-                
+            CreateMap<DataBaseAccessLayer.Data.Entities.User, UserInfo>()
+                .ReverseMap();
+
+            CreateMap<DataBaseAccessLayer.Data.Entities.User, User>()
+                .ReverseMap()
+                .AfterMap((s, d) => d.Comments = null)
+                .AfterMap((s, d) => d.Posts = null);
         }
     }
 }

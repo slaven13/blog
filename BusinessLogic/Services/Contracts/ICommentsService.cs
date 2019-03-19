@@ -8,7 +8,7 @@ namespace BusinessLogic.Services
 {
     public interface ICommentsService
     {
-        List<Comment> GetPostComments(long postId);
+        List<Comment> GetPostComments(long postId);        
         Comment GetComment(long commentId);
         void AddComment(Comment post);
         void DeleteComment(long postId);

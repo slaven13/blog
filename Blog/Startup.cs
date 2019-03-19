@@ -53,6 +53,7 @@ namespace Blog
 
             services.AddScoped(typeof(IPostsService), typeof(PostsService));
             services.AddScoped(typeof(ICommentsService), typeof(CommentsService));
+            services.AddScoped(typeof(IUsersService), typeof(UsersService));
 
             services.AddAutoMapper();
             //services.AddScoped(typeof(Profile), typeof(UserProfile));

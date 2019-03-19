@@ -8,8 +8,7 @@ namespace DataBaseAccessLayer.Data.Repository.Contracts
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        IList<Comment> GetCommentsByUser(long userId);
-        IList<Comment> GetCommentsByPost(long postId);
-        IList<Comment> GetCommentsWithUser();
+        IList<Comment> GetComments();
+        Comment GetFullComment(long commentId);        
     }
 }

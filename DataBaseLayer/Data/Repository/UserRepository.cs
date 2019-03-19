@@ -2,9 +2,9 @@
 using DataBaseAccessLayer.Data.Repository.GenericRepository;
 using DataBaseAccessLayer.Data.DatabaseContext;
 using DataBaseAccessLayer.Data.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DataBaseAccessLayer.Data.Repository
 {
@@ -12,7 +12,7 @@ namespace DataBaseAccessLayer.Data.Repository
     {
         private readonly IRepository<User> userRepository;
 
-        public UserRepository(BlogContext context,IRepository<User> userRepository)
+        public UserRepository(BlogContext context, IRepository<User> userRepository)
             : base(context)
         {
             this.userRepository = userRepository;
@@ -21,6 +21,14 @@ namespace DataBaseAccessLayer.Data.Repository
         public string GetUsername(long userId)
         {
             return userRepository.Get(userId).Username;
+        }
+
+        public IList<User> GetUsersWithPostsAndComments()
+        {
+            return userRepository.Get()
+                                 .Include(u => u.Comments)
+                                 .Include(u => u.Posts)
+                                 .ToList();
         }
     }
 }
