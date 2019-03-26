@@ -205,7 +205,7 @@ namespace BusinessLogic.Services
                 usersCounts.Add(new UserActivities
                                 {
                                     Id = postUser.User.Id,
-                                    Username = postUser.User.Username,
+                                    Username = postUser.User.UserName,
                                     Count = totalCountActivities
                                 }
                 );
@@ -227,7 +227,7 @@ namespace BusinessLogic.Services
                     usersCounts.Add(new UserActivities
                                     {
                                         Id = commentUser.User.Id,
-                                        Username = commentUser.User.Username,
+                                        Username = commentUser.User.UserName,
                                         Count = totalCountActivities
                                     }
                     );

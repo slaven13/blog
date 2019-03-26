@@ -26,20 +26,32 @@ namespace DataBaseAccessLayer.Data.Seed
 
             User user1 = new User
             {
-                Username = "slaven",
+                UserName = "slaven",
+                Email = "slaven.antic@gmail.com",
+                EmailConfirmed = true,
                 FirstName = "Slaven",
                 SecondName = "Antic",
-                Password = "12345678",
+                Password = "Slaven13!",
+                LockoutEnabled = true,
+                //LockoutEnd = DateTime.UtcNow,
+                TwoFactorEnabled = false,
+                AccessFailedCount = 0,
                 Comments = null,
                 Posts = null
             };
 
             User user2 = new User
             {
-                Username = "someone",
+                UserName = "someone",
+                Email = "someone.else@mail.com",
+                EmailConfirmed = true,
                 FirstName = "Someone",
                 SecondName = "Else",
-                Password = "12345678",
+                Password = "Someone13!",
+                LockoutEnabled = true,
+                //LockoutEnd = DateTime.UtcNow,
+                TwoFactorEnabled = false,
+                AccessFailedCount = 0,
                 Comments = null,
                 Posts = null
             };
@@ -48,8 +60,8 @@ namespace DataBaseAccessLayer.Data.Seed
             blogContext.SaveChanges();
 
             var users = userRepository.Get();
-            var user1Id = users.Where(u => u.Username == "slaven").FirstOrDefault().Id;
-            var user2Id = users.Where(u => u.Username == "someone").FirstOrDefault().Id;
+            var user1Id = users.Where(u => u.UserName == "slaven").FirstOrDefault().Id;
+            var user2Id = users.Where(u => u.UserName == "someone").FirstOrDefault().Id;
 
             Post post1 = new Post
             {

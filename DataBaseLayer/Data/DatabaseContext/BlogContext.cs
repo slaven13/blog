@@ -1,13 +1,12 @@
 ﻿using DataBaseAccessLayer.Data.Entities.Mappings;
 using DataBaseAccessLayer.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace DataBaseAccessLayer.Data.DatabaseContext
 {
-    public class BlogContext: DbContext
+    public class BlogContext: IdentityDbContext<User, IdentityRole<long>, long>
     {
         public BlogContext(DbContextOptions<BlogContext> options)
             : base(options)

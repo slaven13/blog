@@ -20,7 +20,7 @@ namespace DataBaseAccessLayer.Data.Repository
 
         public string GetUsername(long userId)
         {
-            return userRepository.Get(userId).Username;
+            return userRepository.Get(userId).UserName;
         }
 
         public IList<User> GetUsersWithPostsAndComments()
