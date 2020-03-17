@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Controllers
 {
@@ -34,6 +35,7 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("comments")]
+        [Authorize]
         public void Post(long postId, [FromBody] BusinessLogic.Models.Comment comment)
         {
             _commentsService.AddComment(comment);
@@ -42,6 +44,7 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("comments/{commentId}")]
+        [Authorize]
         public void Post(long postId, long commentId, [FromBody] BusinessLogic.Models.Comment comment)
         {
             comment.ParentCommentId = commentId;
@@ -50,6 +53,7 @@ namespace Blog.Controllers
 
         // PUT api/values/5
         [HttpPut("comments/{commentId}")]
+        [Authorize]
         public void Put(long postId, long commentId, [FromBody] BusinessLogic.Models.Comment comment)
         {
             comment.Id = commentId;
@@ -58,6 +62,7 @@ namespace Blog.Controllers
 
         // DELETE api/values/5
         [HttpDelete("comments/{commentId}")]
+        [Authorize]
         public void Delete(long postId, long commentId)
         {
             _commentsService.DeleteComment(commentId);

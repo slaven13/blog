@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Controllers
 {
@@ -34,6 +35,7 @@ namespace Blog.Controllers
 
         // POST api/values
         [HttpPost("posts")]
+        [Authorize]
         public void Post([FromBody] BusinessLogic.Models.Post post)
         {
             _postService.AddPost(post);
@@ -41,6 +43,7 @@ namespace Blog.Controllers
 
         // PUT api/values/5
         [HttpPut("posts/{postId}")]
+        [Authorize]
         public void Put(long postId, [FromBody] BusinessLogic.Models.Post post)
         {
             post.Id = postId;
@@ -49,6 +52,7 @@ namespace Blog.Controllers
 
         // DELETE api/values/5
         [HttpDelete("posts/{postId}")]
+        [Authorize]
         public void Delete(long postId)
         {
             _postService.DeletePost(postId);

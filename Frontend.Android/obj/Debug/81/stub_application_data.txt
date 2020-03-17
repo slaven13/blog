@@ -1,0 +1,2 @@
+android.app.Application
+Frontend.Android.Frontend.Android
